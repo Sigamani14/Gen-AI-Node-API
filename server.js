@@ -5,7 +5,11 @@ require('dotenv').config(); // load environment variables from .env file
 const app = express();
 const cors = require('cors'); // to handle CORS
 
-app.use(cors()); // enable CORS
+app.use(cors(
+  {
+    origin: 'https://blue-mushroom-0f060a100.2.azurestaticapps.net/', // allow requests from this origin
+  }
+)); // enable CORS
 app.use(express.json()); // to parse JSON bodies
 
 // Add CSP header to allow connections
