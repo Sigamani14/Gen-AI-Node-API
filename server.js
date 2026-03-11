@@ -5,22 +5,21 @@ require('dotenv').config(); // load environment variables from .env file
 const app = express();
 const cors = require('cors'); // to handle CORS
 
-app.use(cors(
-  {
-    origin: 'https://blue-mushroom-0f060a100.2.azurestaticapps.net', // allow requests from this origin
-  }
-)); // enable CORS
+const corsOptions = {
+  origin: 'https://blue-mushroom-0f060a100.2.azurestaticapps.net',
+  methods: ['GET','POST','OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));   // handle preflight requests
 app.use(express.json()); // to parse JSON bodies
 
 // Add CSP header to allow connections
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' https://blue-mushroom-0f060a100.2.azurestaticapps.net https://gen-ai-node-api-production.up.railway.app");
-  next();
-});
-
-// app.get('/', (req, res) => {
-//   res.send('Hello!');
-// }); 
+// app.use((req, res, next) => {
+//   res.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' https://blue-mushroom-0f060a100.2.azurestaticapps.net https://gen-ai-node-api-production.up.railway.app");
+//   next();
+// });
 
 const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY);
 
