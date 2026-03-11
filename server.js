@@ -5,13 +5,14 @@ require('dotenv').config(); // load environment variables from .env file
 const app = express();
 const cors = require('cors'); // to handle CORS
 
-const corsOptions = {
+app.use(cors({
   origin: 'https://blue-mushroom-0f060a100.2.azurestaticapps.net',
   methods: ['GET','POST','OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-};
+  allowedHeaders: ['Content-Type']
+}));
 
-app.use(cors(corsOptions));
+// handle preflight request explicitly
+app.options('/generate', cors());
 app.use(express.json()); // to parse JSON bodies
 
 // Add CSP header to allow connections
@@ -24,15 +25,19 @@ const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY);
 
 console.log("Gemini key loaded:", !!process.env.GEMINI_API_KEY);
 
-app.get('/', async (req, res) => {
-
-  const response = await genAI.models.generateContent({
-    model: 'gemini-2.5-flash', // specify the model to use
-    contents: 'Give me a random greeting',
-  });
-
-  res.json(response); // return the response as JSON
+app.get('/', (req, res) => {
+  res.send('API running');
 });
+
+// app.get('/', async (req, res) => {
+
+//   const response = await genAI.models.generateContent({
+//     model: 'gemini-2.5-flash', // specify the model to use
+//     contents: 'Give me a random greeting',
+//   });
+
+//   res.json(response); // return the response as JSON
+// });
 
 app.post('/generate', async(req, res) => {
     const { prompt} = req.body; // get the prompt from the request body
