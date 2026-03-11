@@ -7,14 +7,14 @@ const cors = require('cors'); // to handle CORS
 
 app.use(cors(
   {
-    origin: 'https://blue-mushroom-0f060a100.2.azurestaticapps.net/', // allow requests from this origin
+    origin: 'https://blue-mushroom-0f060a100.2.azurestaticapps.net', // allow requests from this origin
   }
 )); // enable CORS
 app.use(express.json()); // to parse JSON bodies
 
 // Add CSP header to allow connections
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' http://localhost:3000");
+  res.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' https://blue-mushroom-0f060a100.2.azurestaticapps.net https://gen-ai-node-api-production.up.railway.app");
   next();
 });
 
@@ -23,6 +23,8 @@ app.use((req, res, next) => {
 // }); 
 
 const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY);
+
+console.log("Gemini key loaded:", !!process.env.GEMINI_API_KEY);
 
 app.get('/', async (req, res) => {
 
