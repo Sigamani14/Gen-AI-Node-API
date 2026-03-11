@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 //   res.send('Hello!');
 // }); 
 
-const genAI = new GoogleGenAI({});
+const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY);
 
 app.get('/', async (req, res) => {
 
