@@ -12,7 +12,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));   // handle preflight requests
 app.use(express.json()); // to parse JSON bodies
 
 // Add CSP header to allow connections
