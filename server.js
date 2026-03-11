@@ -7,19 +7,11 @@ const cors = require('cors'); // to handle CORS
 
 app.use(cors({
   origin: 'https://blue-mushroom-0f060a100.2.azurestaticapps.net',
-  methods: ['GET','POST','OPTIONS'],
-  allowedHeaders: ['Content-Type']
 }));
 
 // handle preflight request explicitly
-app.options('/generate', cors());
+// app.options('/generate', cors());
 app.use(express.json()); // to parse JSON bodies
-
-// Add CSP header to allow connections
-// app.use((req, res, next) => {
-//   res.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' https://blue-mushroom-0f060a100.2.azurestaticapps.net https://gen-ai-node-api-production.up.railway.app");
-//   next();
-// });
 
 const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY);
 
@@ -58,7 +50,7 @@ app.post('/generate', async(req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000; // use the port from environment variables or default to 3000
+const PORT = process.env.PORT || 8080; // use the port from environment variables or default to 8080
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
